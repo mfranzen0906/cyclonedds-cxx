@@ -604,6 +604,21 @@ dds::pub::detail::DataWriter<T>::writedispose(const T& sample)
 
 template <typename T>
 void
+dds::pub::detail::DataWriter<T>::writedispose(const ::dds::core::InstanceHandle& instance)
+{
+    this->check();
+    if (org::eclipse::cyclonedds::topic::TopicTraits<T>::isKeyless()) {
+        ISOCPP_THROW_EXCEPTION(ISOCPP_UNSUPPORTED_ERROR,
+                               "writedispose by instance handle requires a keyed topic");
+    }
+
+    T sample{};
+    this->key_value(sample, instance);
+    this->writedispose(sample, instance);
+}
+
+template <typename T>
+void
 dds::pub::detail::DataWriter<T>::writedispose(const T& sample, const dds::core::Time& timestamp)
 {
     this->check();

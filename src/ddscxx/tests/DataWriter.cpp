@@ -627,6 +627,24 @@ TEST_F(DataWriter, writedispose)
     ReadAndCheckSampleType1(testData3, viewedDisposedState,  true);
 }
 
+TEST_F(DataWriter, writedispose_by_instance_handle)
+{
+    Space::Type1 original(7, 8, 9);
+    Space::Type1 key_only(7, 0, 0);
+    dds::sub::status::DataState disposed_state(
+                        dds::sub::status::SampleState::not_read(),
+                        dds::sub::status::ViewState::new_view(),
+                        dds::sub::status::InstanceState::not_alive_disposed());
+
+    this->SetupCommunication(true);
+    dds::core::InstanceHandle handle = this->writer.register_instance(original);
+    ASSERT_NE(handle, dds::core::null);
+
+    this->writer->writedispose(handle);
+
+    ReadAndCheckSampleType1(key_only, disposed_state, true);
+}
+
 TEST_F(DataWriter, dispose_instance)
 {
     static const int32_t MAX_INSTANCES =  5;

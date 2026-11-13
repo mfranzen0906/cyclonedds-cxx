@@ -101,6 +101,14 @@ public:
 
     void writedispose(const T& sample);
 
+    /**
+     * Write and dispose an instance using the key associated with its handle.
+     * This overload requires a keyed topic. Only key fields can be recovered
+     * from the handle. Other fields in the written sample have their default
+     * values.
+     */
+    void writedispose(const ::dds::core::InstanceHandle& instance);
+
     void writedispose(const T& sample, const dds::core::Time& timestamp);
 
     void writedispose(const T& sample, const ::dds::core::InstanceHandle& instance);
